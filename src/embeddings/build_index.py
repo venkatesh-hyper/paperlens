@@ -73,16 +73,23 @@ def benchmark_index(index, embeddings):
         elapsed = (time.time() - start) * 1000  # ms
         times.append(elapsed)
 
-    p50 = sorted(times)[5]
+    p50 = sorted(times)[4]
     p95 = sorted(times)[9]
 
-    logger.success(f"Benchmark Results:")
-    logger.success(f"  p50 latency: {p50:.2f}ms")
-    logger.success(f"  p95 latency: {p95:.2f}ms")
-    logger.success(f"  min latency: {min(times):.2f}ms")
-    logger.success(f"  max latency: {max(times):.2f}ms")
+    # QPS — run 1000 queries, measure total time
+    repeated = np.tile(embeddings, (1000 // len(embeddings) + 1, 1))[:1000]
+    start = time.time()
+    for i in range(1000):
+        index.search(repeated[i:i+1], k)
+    qps = 1000 / (time.time() - start)
 
-    return p50, p95
+    logger.success(f"  p50 latency : {p50:.2f}ms")
+    logger.success(f"  p95 latency : {p95:.2f}ms")
+    logger.success(f"  min latency : {min(times):.2f}ms")
+    logger.success(f"  max latency : {max(times):.2f}ms")
+    logger.success(f"  QPS         : {qps:.0f} queries/second")
+
+    return p50, p95, qps
 
 def test_search(index, embeddings, ids):
     logger.info("Testing search functionality...")
@@ -109,7 +116,7 @@ def main():
     save_index(index, ids)
 
     # Benchmark
-    p50, p95 = benchmark_index(index, embeddings)
+    p50, p95, qps = benchmark_index(index, embeddings)
 
     # Test search quality
     test_search(index, embeddings, ids)
