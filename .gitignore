@@ -1,0 +1,28 @@
+# Data - too large for GitHub
+data/
+*.npy
+*.faiss
+*.db
+
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.egg-info/
+
+# MLflow
+mlruns/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/venv/
+.venv/
