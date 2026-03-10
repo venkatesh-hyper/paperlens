@@ -3,10 +3,12 @@ import faiss
 import numpy as np
 import time
 import json
+from oauthlib.uri_validate import query
 from sentence_transformers import SentenceTransformer
 from fastapi import FastAPI, HTTPException, Query
 from contextlib import asynccontextmanager
 from loguru import logger
+from functools import lru_cache
 
 from src.api.models import (
     SearchResponse, PaperResult, PaperDetail, HealthResponse
@@ -111,7 +113,14 @@ def health():
         embedding_loading=state["model"] is not None
     )
     
-    
+@lru_cache(maxsize=512)
+def embed_query(query: str):
+    return state["model"].encode(
+        [query],
+        normalize_embeddings=True,
+        convert_to_numpy=True
+    ).astype("float32")
+       
 @app.get("/search", response_model=SearchResponse)
 def search(
     query: str = Query(..., description="Search query"),
@@ -122,7 +131,7 @@ def search(
     start = time.time()
     
     # 1 - Embed the query
-    query_vector = state["model"].encode([query], normalize_embeddings=True, convert_to_numpy=True).astype("float32")
+    query_vector = embed_query(query)
     
     # 2 - Search FAISS index
     distances, indices = state["index"].search(query_vector, top_k)
