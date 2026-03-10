@@ -9,6 +9,8 @@ from fastapi import FastAPI, HTTPException, Query
 from contextlib import asynccontextmanager
 from loguru import logger
 from functools import lru_cache
+from src.api.cache import get_cached_response , set_cache
+
 
 from src.api.models import (
     SearchResponse, PaperResult, PaperDetail, HealthResponse
@@ -130,6 +132,12 @@ def search(
         raise HTTPException(status_code=400, detail="Query cannot be empty")
     start = time.time()
     
+    cached = get_cached_response(query, top_k)
+    if cached:
+        return cached
+    
+    start = time.time()
+    
     # 1 - Embed the query
     query_vector = embed_query(query)
     
@@ -158,6 +166,10 @@ def search(
         total=len(results),
         latency_ms=round(latency_ms,3),
     )
+    
+    set_cache(query, top_k, SearchResponse)
+    
+    return response
     
     @app.get("/papers/{paper_id}", response_model=PaperDetail)
     def get_paper(paper_id: str):
