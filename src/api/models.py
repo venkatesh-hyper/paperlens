@@ -10,6 +10,7 @@ class PaperResult (BaseModel):
     title: str
     authors: str
     abstract: str
+    year :int
     field :str
     url: str
     score: float

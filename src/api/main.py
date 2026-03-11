@@ -10,6 +10,7 @@ from contextlib import asynccontextmanager
 from loguru import logger
 from functools import lru_cache
 from src.api.cache import get_cached_response , set_cache
+from src.rag.pipeline import summarize_paper
 
 
 from src.api.models import (
@@ -168,7 +169,6 @@ def search(
     )
     
     set_cache(query, top_k, SearchResponse)
-    
     return response
     
     @app.get("/papers/{paper_id}", response_model=PaperDetail)
@@ -177,5 +177,17 @@ def search(
         if not paper:
             raise HTTPException(status_code=404, detail="Paper not found")
         return PaperDetail(**paper) 
+    
+@app.get("/summarize/{paper_id}")
+def summarize(paper_id: str):
+    paper = get_paper_by_id(paper_id)
+    if not paper:
+        raise HTTPException(status_code=404, detail=f"Paper {paper_id} not found")
+
+    result = summarize_paper(
+        title    = paper["title"],
+        abstract = paper["abstract"],
+    )
+    return result
     
     
