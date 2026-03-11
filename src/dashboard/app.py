@@ -47,10 +47,14 @@ st.divider()
 # ── API STATUS ───────────────────────────────────
 is_up, health = check_api()
 if is_up:
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Status", "🟢 Online")
-    col2.metric("Papers Indexed", health.get("paper_indexed", 0))
-    col3.metric("Model", "all-MiniLM-L6-v2")
+    st.markdown(
+        f" **Online** &nbsp;|&nbsp; "
+        f"**{health.get('paper_indexed', 0)} papers** &nbsp;|&nbsp; "
+        f"**all-MiniLM-L6-v2** &nbsp;|&nbsp; "
+        f"**FAISS IVFFlat** &nbsp;|&nbsp; "
+        f"**Groq LLaMA-3.3-70b**",
+        unsafe_allow_html=True
+    )
 else:
     st.error("❌ API offline — run: uvicorn src.api.main:app --reload")
     st.stop()
@@ -89,11 +93,11 @@ if data and data.get("results"):
             st.markdown(f"**Score:** `{paper['score']:.3f}`")
 
         st.markdown(
-            f"👤 {paper['authors'][:80]}{'...' if len(paper['authors']) > 80 else ''}  "
-            f"|  📅 {paper.get('year', 'N/A')}  |  🏷 `{paper.get('field', '')}`"
+            f"{paper['authors'][:80]}{'...' if len(paper['authors']) > 80 else ''}  "
+            f"|  {paper.get('year', 'N/A')}  |  `{paper.get('field', '')}`"
         )
 
-        with st.expander("📄 Abstract"):
+        with st.expander("Abstract"):
             st.write(paper["abstract"])
 
         if st.button("🤖 AI Summary", key=f"sum_{paper['id']}_{i}"):
@@ -104,22 +108,22 @@ if data and data.get("results"):
 
         if paper["id"] in st.session_state.summaries:
             s = st.session_state.summaries[paper["id"]]
-            st.success(f"⚡ Generated in {s['latency_ms']}ms  |  Tokens: {s['tokens_used']}")
+            st.success(f"Generated in {s['latency_ms']}ms  |  Tokens: {s['tokens_used']}")
             st.markdown(s["summary"])
 
-        st.markdown(f"[📎 View on arXiv]({paper['url']})")
+        st.markdown(f"[View on arXiv]({paper['url']})")
         st.divider()
 
 # ── SIDEBAR ──────────────────────────────────────
 with st.sidebar:
-    st.markdown("## 📊 About PaperLens")
+    st.markdown("## About PaperLens")
     st.markdown("""
     **Stack:**
-    - 🧠 sentence-transformers
-    - ⚡ FAISS IVFFlat
-    - 🚀 FastAPI + LRU cache
-    - 🤖 Groq LLaMA-3.3-70b
-    - 📊 Streamlit
+    - sentence-transformers
+    - FAISS IVFFlat
+    - FastAPI + LRU cache
+    - Groq LLaMA-3.3-70b
+    - Streamlit
     
     **Benchmarks:**
     - 956 papers indexed
