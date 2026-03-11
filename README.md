@@ -77,7 +77,8 @@ uvicorn src.api.main:app --reload
 # Start Dashboard
 streamlit run src/dashboard/app.py
 ```
-
+## demo
+![PaperLens Dashboard](docs/paperlens_demo_p1.png)
 ---
 
 ## 📁 Project Structure
