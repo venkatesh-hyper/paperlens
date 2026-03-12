@@ -1,0 +1,55 @@
+# ── docker-compose.yml ───────────────────────────────────────────────────────
+# PaperLens — Full Stack
+#
+# Start everything:   docker-compose up --build
+# Stop:               docker-compose down
+# Logs:               docker-compose logs -f
+# Rebuild one:        docker-compose up --build api
+
+version: "3.9"
+
+services:
+
+  # ── FastAPI Backend ──────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: paperlens-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env                          # GROQ_API_KEY lives here
+    volumes:
+      - ./data:/app/data              # Mount data dir so index is shared
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    networks:
+      - paperlens-net
+
+  # ── Streamlit Dashboard ──────────────────────────────────────────────────
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    container_name: paperlens-dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8000       # Dashboard talks to api service by name
+    depends_on:
+      api:
+        condition: service_healthy    # Wait until API is healthy before starting
+    restart: unless-stopped
+    networks:
+      - paperlens-net
+
+networks:
+  paperlens-net:
+    driver: bridge

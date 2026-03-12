@@ -52,7 +52,7 @@ def fetch_papers(field, max_results = PAPERS_PER_FIELD):
                 resp = requests.get(base_url, params=params, timeout=30)
                 resp.raise_for_status()
                 papers.extend(parse_xml(resp.text, field))
-                time.sleep(3) # to respect arXiv's rate limits
+                time.sleep(5) # to respect arXiv's rate limits
             except Exception as e:
                 logger.error(f"Error fetching papers for {field}: {e}")
                 continue
