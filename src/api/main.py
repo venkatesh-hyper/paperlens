@@ -1,6 +1,5 @@
 import sqlite3
 import faiss
-import numpy as np
 import time
 import json
 from sentence_transformers import SentenceTransformer

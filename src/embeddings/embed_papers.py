@@ -2,7 +2,6 @@ import sqlite3
 import numpy as np
 from loguru import logger
 from sentence_transformers import SentenceTransformer
-from tqdm import tqdm
 import time 
 
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
@@ -83,7 +82,7 @@ def main():
     loaded = np.load(EMBEDDINGS_PATH)
     logger.success(f"Verified: {loaded.shape[0]} embeddings × {loaded.shape[1]} dimensions")
     logger.success(" Embedding pipeline complete!")
-    logger.info(f"Next step: python src/embeddings/build_index.py")
+    logger.info("Next step: python src/embeddings/build_index.py")
 
 
 if __name__ == "__main__":

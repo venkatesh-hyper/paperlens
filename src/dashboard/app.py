@@ -37,7 +37,7 @@ def check_api():
         if resp.status_code == 200:
             return True, resp.json()
         return False, {}
-    except:
+    except Exception:
         return False, {}
 
 # ── HEADER ───────────────────────────────────────
