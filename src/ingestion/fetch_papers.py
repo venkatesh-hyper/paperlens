@@ -12,9 +12,9 @@ FIELDS = [
     "cs.LG",   # Machine Learning
     "cs.CL",   # Computation and Language (NLP)
 ]
-PAPERS_PER_FIELD = 400   # 400 × 3 = 1200 papers
+PAPERS_PER_FIELD = 35000   # 35000 × 3 = 105,000 papers
 DB_PATH          = "data/papers.db"
-DELAY_SECONDS    = 10   # wait 10 seconds between requests
+DELAY_SECONDS    = 5   # wait 10 seconds between requests
 
 
 def create_database():
