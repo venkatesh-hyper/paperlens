@@ -12,7 +12,6 @@ query = st.text_input("Search papers...", placeholder="e.g. attention mechanism 
 @st.cache_resource
 def load_resources():
     import faiss
-    import numpy as np
     from sentence_transformers import SentenceTransformer
     from huggingface_hub import hf_hub_download
 
@@ -26,8 +25,6 @@ def load_resources():
     return model, index, conn
 
 if query:
-    import faiss
-    import numpy as np
     with st.spinner("Loading model... (first time takes ~30s)"):
         model, index, conn = load_resources()
     vec = model.encode([query]).astype("float32")
