@@ -406,37 +406,52 @@ button[data-testid="stBaseButton-secondary"]:hover {
 
 
 # ── Groq Summary Function ─────────────────────────────────────────────────────
-def get_summary(paper_id: str, title: str, abstract: str) -> Optional[str]:
-    """Fetches a summarized version of the paper abstract using Groq's LLaMA-3."""
+def get_summary(paper_id, title, abstract):
     key = os.environ.get("GROQ_API_KEY", "")
     if not key:
+        st.error("No GROQ_API_KEY found in secrets.")
         return None
+
     try:
-        r = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
-            json={
-                "model": "llama3-8b-8192",
-                "messages": [{"role": "user", "content":
-                    f"Summarize this arXiv paper in 3-4 sentences for an ML engineer. "
-                    f"Focus on: problem, method, key results.\n\nTitle: {title}\nAbstract: {abstract}\n\nSummary:"}],
-                "max_tokens": 200, "temperature": 0.3,
-            }, timeout=15,
+        from groq import Groq
+
+        client = Groq(api_key=key)
+
+        clean_title    = str(title or "").strip()[:200]
+        clean_abstract = str(abstract or "").strip()[:1000]
+
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a concise research assistant for ML engineers."
+                },
+                {
+                    "role": "user",
+                    "content": f"Summarize this paper in 3 sentences. Focus on: problem, method, results.\n\nTitle: {clean_title}\n\nAbstract: {clean_abstract}"
+                }
+            ],
+            max_tokens=200,
+            temperature=0.3,
         )
-        
-        # Handle Rate Limits Gracefully
-        if r.status_code == 429:
-            st.warning("Groq rate limit reached. Please try again in a minute.")
-            return None
-            
-        r.raise_for_status()
-        return r.json()["choices"][0]["message"]["content"].strip()
-        
-    except requests.exceptions.Timeout:
-        st.error("Groq API timed out. The model is currently overloaded.")
-        return None
+
+        return response.choices[0].message.content.strip()
+
     except Exception as e:
-        st.error(f"Groq API Error: {e}")
+        st.error(f"Groq error: {e}")
+        return None
+
+        # ← This shows the REAL error from Groq
+        if r.status_code != 200:
+            error_detail = r.json().get("error", {}).get("message", r.text)
+            st.error(f"Groq error {r.status_code}: {error_detail}")
+            return None
+
+        return r.json()["choices"][0]["message"]["content"].strip()
+
+    except Exception as e:
+        st.error(f"Request failed: {e}")
         return None
 
 

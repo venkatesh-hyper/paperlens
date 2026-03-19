@@ -8,11 +8,32 @@ from loguru import logger
 
 #config
 FIELDS = [
-    "cs.AI",   # Artificial Intelligence
-    "cs.LG",   # Machine Learning
-    "cs.CL",   # Computation and Language (NLP)
+    # Computer Science
+    "cs.AI", "cs.LG", "cs.CL", "cs.CV", "cs.IR", "cs.NE", "cs.RO",
+    
+    # Biology & Medicine
+    "q-bio.GN",   # Genomics
+    "q-bio.NC",   # Neurons and Cognition
+    "q-bio.QM",   # Quantitative Methods
+    "q-bio.BM",   # Biomolecules
+    
+    # Physics
+    "physics.med-ph",  # Medical Physics
+    "physics.data-an", # Data Analysis
+    
+    # Statistics
+    "stat.ML",    # Machine Learning
+    "stat.AP",    # Applications
+    
+    # Electrical Engineering
+    "eess.SP",    # Signal Processing
+    "eess.IV",    # Image and Video Processing
+    
+    # Mathematics
+    "math.ST",    # Statistics Theory
+    "math.OC",    # Optimization and Control
 ]
-PAPERS_PER_FIELD = 35000   # 35000 × 3 = 105,000 papers
+PAPERS_PER_FIELD = 5000   # 5000 = 100,000 papers
 DB_PATH          = "data/papers.db"
 DELAY_SECONDS    = 5   # wait 10 seconds between requests
 
