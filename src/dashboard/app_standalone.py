@@ -497,9 +497,8 @@ left, right = st.columns([2.8, 1], gap="large")
 # ════════════════════════════════
 with right:
     st.subheader("arXiv Semantic Search • Benchmarks")
-    
     st.divider()
-    
+
     # --- Index Stats Section ---
     st.subheader("Index Stats")
     col1, col2 = st.columns(2)
@@ -509,34 +508,34 @@ with right:
         st.write("**Index type**")
         st.write("**Dimensions**")
     with col2:
-        st.write(":green[10,200]")
-        st.write("956")
+        st.write(":green[42,549]")
+        st.write("42,549")
         st.write(":blue[IVFFlat]")
         st.write("384")
-    
+
     st.divider()
 
     # --- Latency Section ---
     st.subheader("Latency")
     l_col1, l_col2 = st.columns(2)
-    l_col1.metric("p50", "0.02ms")
-    l_col1.metric("min", "0.01ms")
-    l_col2.metric("p95", "0.02ms")
-    l_col2.metric("max", "0.03ms")
+    l_col1.metric("p50", "0.31ms")
+    l_col1.metric("min", "0.26ms")
+    l_col2.metric("p95", "0.53ms")
+    l_col2.metric("max", "0.53ms")
 
     st.divider()
 
     # --- Throughput Section ---
     st.subheader("Throughput")
-    st.info("76,540 queries / second")
+    st.info("2,979 queries / second")
 
     st.divider()
 
     # --- Tech Stack Section ---
     st.subheader("Tech Stack")
     stack = [
-        "sentence-transformers", "FAISS • IVFFlat", 
-        "all-MiniLM-L6-v2", "SQLite", "Groq LLaMA-3", 
+        "sentence-transformers", "FAISS • IVFFlat",
+        "all-MiniLM-L6-v2", "SQLite", "Groq LLaMA-3",
         "HuggingFace Hub", "arXiv API • Streamlit"
     ]
     for item in stack:
@@ -549,11 +548,10 @@ with right:
     st.markdown("**Venkatesh P**")
     st.caption("ML Engineer • Chennai")
     st.caption("MCA • University of Madras")
-    
-    btn_col1, btn_col2 = st.columns(2)
-    btn_col1.link_button("GitHub", "https://github.com/vengen9840")
-    btn_col2.link_button("LinkedIn", "https://linkedin.com/in/venkateshp")
 
+    btn_col1, btn_col2 = st.columns(2)
+    btn_col1.link_button("GitHub", "https://github.com/venkatesh-hyper")
+    btn_col2.link_button("LinkedIn", "https://linkedin.com/in/venkatesh-ml")
 
 # ════════════════════════════════
 # LEFT — SEARCH + RESULTS
