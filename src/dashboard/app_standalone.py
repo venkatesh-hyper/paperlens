@@ -563,7 +563,7 @@ with left:
         <div class='hero-title'>Paper<span class='accent'>Lens</span></div>
         <div class='hero-sub'>Search with meaning · not with keywords</div>
         <div class='hero-stats-row'>
-            <div><div class='hstat-val'>42,000</div><div class='hstat-label'>Papers</div></div>
+            <div><div class='hstat-val'>42,549</div><div class='hstat-label'>Papers</div></div>
             <div><div class='hstat-val'>2.5k</div><div class='hstat-label'>QPS</div></div>
             <div><div class='hstat-val'>0.31ms</div><div class='hstat-label'>p50 Latency</div></div>
             <div><div class='hstat-val'>384d</div><div class='hstat-label'>Embeddings</div></div>
